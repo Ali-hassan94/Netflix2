@@ -7,9 +7,9 @@ export default function AnalyticsPage() {
   const { movies } = useMovieStore();
 
   const totalMovies = movies.length;
-  const totalViews = movies.reduce((sum, m) => sum + m.views, 0);
+  const totalViews = movies.reduce((sum, m) => sum + (m.views || 0), 0);
 
-  const uniqueCategories = [...new Set(movies.map(m => m.category))].length;
+  const uniqueCategories = [...new Set(movies.map(m => m.genre))].length;
 
   const stats = [
     { title: "Total Movies", value: totalMovies },
