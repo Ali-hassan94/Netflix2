@@ -1,4 +1,4 @@
-\"use client";
+"use client";
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,11 +19,12 @@ export default function SearchPage() {
   const [filtered, setFiltered] = useState<Movie[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/movies")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/movies`)
       .then(res => res.json())
-      .then(data => {
+      .then((data: Movie[]) => {
         setMovies(data);
-      });
+      })
+      .catch(error => console.error("Error fetching movies:", error));
   }, []);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function SearchPage() {
       movie =>
         movie.title.toLowerCase().includes(query.toLowerCase()) ||
         movie.description.toLowerCase().includes(query.toLowerCase()) ||
-        movie.genre.toLowerCase().includes(query.toLowerCase())
+        movie.genre.toLowerCase().includes(query.toLowerCase()),
     );
 
     setFiltered(result);
@@ -39,9 +40,7 @@ export default function SearchPage() {
 
   return (
     <div className="px-10 mt-20">
-      <h2 className="text-2xl font-bold mb-6">
-        Search Results for "{query}"
-      </h2>
+      <h2 className="text-2xl font-bold mb-6">Search Results for "{query}"</h2>
 
       {filtered.length === 0 && (
         <p className="text-gray-400">No movies found</p>
