@@ -8,9 +8,8 @@ export default function CategoriesPage() {
   const { movies } = useMovieStore();
   const router = useRouter();
 
-  // Generate unique categories with count
   const categories = Object.entries(
-    movies.reduce((acc: any, movie) => {
+    movies.reduce((acc: Record<string, number>, movie) => {
       acc[movie.genre] = (acc[movie.genre] || 0) + 1;
       return acc;
     }, {}),
