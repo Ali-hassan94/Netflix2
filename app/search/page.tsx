@@ -1,15 +1,22 @@
-"use client";
+\"use client";
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import MovieCard from "../components/MovieCard";
+import MovieCard from "@/components/movie/MovieCard";
+
+type Movie = {
+  id: number;
+  title: string;
+  description: string;
+  genre: string;
+};
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
 
-  const [movies, setMovies] = useState([]);
-  const [filtered, setFiltered] = useState([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [filtered, setFiltered] = useState<Movie[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/movies")
@@ -20,10 +27,11 @@ export default function SearchPage() {
   }, []);
 
   useEffect(() => {
-    const result = movies.filter((movie: any) =>
-      movie.title.toLowerCase().includes(query.toLowerCase()) ||
-      movie.description.toLowerCase().includes(query.toLowerCase()) ||
-      movie.genre.toLowerCase().includes(query.toLowerCase())
+    const result = movies.filter(
+      movie =>
+        movie.title.toLowerCase().includes(query.toLowerCase()) ||
+        movie.description.toLowerCase().includes(query.toLowerCase()) ||
+        movie.genre.toLowerCase().includes(query.toLowerCase())
     );
 
     setFiltered(result);
@@ -40,7 +48,7 @@ export default function SearchPage() {
       )}
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-        {filtered.map((movie: any) => (
+        {filtered.map(movie => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
